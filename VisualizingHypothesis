@@ -1,5 +1,4 @@
 # visualizing hypothesis tests
-
 # one tailed test
 x=seq(50, 140,length=200)
 y1=dnorm(x, 80, 10)
@@ -7,3 +6,88 @@ plot(x, y1, type='l', lwd=2, col='red')
 y2=dnorm(x,110,10)
 lines(x,y2, type='l', lwd=2, col='blue')
 abline(v=qnorm(0.95, 80, 10))
+
+#Here we have drawn a vertical line
+# with abline() verticle, at the 95th percentile of the red distribution. 
+# It means that this line is drawn where 5 percent of the
+# population is to the right of the line. This would be
+# the cutoff for a one-tailed test. So if we get a value
+# higher than this line we are going to reject
+# the null hypothesis and we will assume at the alternative hypothesis,
+# the blue distribution, is actually the correct one.
+
+# It means that sometimes we will make an error, the so-called type 1 error, 
+# or alfa error. In five percent of the cases we will get a mean higher
+# than this value, just by chance.
+
+#two tailed test
+# Now we have drawn new ablines, two of them.
+# Notice how I have changed so I don't take the 95th percentile
+# instead I leave out 2,5 percent to the left and 2.5 percent to the right, so together
+# this area plus this area is 5 percent of all the samplings I'm likely to draw
+# from the null hypothesis distribution.
+
+x=seq(50, 140,length=200)
+y1=dnorm(x, 80, 10)
+plot(x, y1, type='l', lwd=2, col='red')
+y2=dnorm(x,110,10)
+lines(x,y2, type='l', lwd=2, col='blue')
+abline(v=qnorm(0.025, 80, 10))
+abline(v=qnorm(0.975, 80, 10))
+
+# to color the rejection area add the following code
+
+cord.x1 <- c((round(qnorm(0.975, 80, 10))),seq((round(qnorm(0.975, 80, 10))), 120,1),120) 
+cord.y1 <- c(0,dnorm(seq((round(qnorm(0.975, 80, 10))), 120, 1), 80, 10),0)
+polygon(cord.x1, cord.y1, col='red')
+
+cord.x2 <- c(50,seq(50,round(qnorm(0.025, 80, 10),1)),round(qnorm(0.025, 80, 10))) 
+cord.y2 <- c(0,dnorm(seq(50,round(qnorm(0.025, 80, 10),1)), 80, 10),0) 
+
+polygon(cord.x2, cord.y2, col='red')
+
+
+#Imagine that the alternative hypothesis were true. 
+#Beta is the risk that you will keep (=not reject) the false null hypothesis
+x=seq(50,140,length=200)
+y1=dnorm(x,80, 10)
+plot(x,y1,type='l',lwd=2,col='red')
+y2=dnorm(x,110, 10)
+lines(x,y2,type='l',lwd=2,col='blue')
+cord.x2<- c(0,seq((round(1-qnorm(0.025,110,10))),100,1),100)
+cord.y2 <- c(0,dnorm(seq((round(1-qnorm(0.025, 110, 10))), 100, 1), 110, 10),0) 
+polygon(cord.x2,cord.y2,col='red')
+abline(v=round(qnorm(0.975, 80, 10, lower.tail=T)))
+abline(v=round(qnorm(0.025, 80, 10, lower.tail=T)))
+text(95,0.005, "? ",xpd=5)
+
+# So let's imagine that the blue distribution here is actually the true
+# and you can see that many times we will draw a sample with
+# a high mean and we are going to reject the red null hypothesis, but there is
+# this shaded area here, the so-called beta error or type two error. Those are samplings
+# that actually come from the alternative hypothesis distribution but they happen 
+# to be close to the null hypothesis and therefore we will not reject the false
+# null hypothesis.
+
+
+#Statistical power, 1-beta, is the probability to reject a false null hypothesis
+x<- seq(50,140,length=200)
+y1<- dnorm(x,80, 10)
+plot(x,y1,type='l',lwd=2,col='red')
+y2<- dnorm(x,110, 10)
+lines(x,y2,type='l',lwd=2,col='blue')
+cord.x2<- c(0,seq((round(1-qnorm(0.025,110,10))),100,1),100)
+cord.y2 <- c(0,dnorm(seq((round(1-qnorm(0.025, 110, 10))), 100, 1), 110, 10),0) 
+polygon(cord.x2,cord.y2,col='red')
+abline(v=round(qnorm(0.975, 80, 10, lower.tail=T)))
+abline(v=round(qnorm(0.025, 80, 10, lower.tail=T)))
+cord.x1 <- c(100,seq(round(qnorm(0.975, 80, 10, lower.tail=T)), 140,1),140) 
+cord.y1 <- c(0,dnorm(seq(round(qnorm(0.975, 80, 10, lower.tail=T)),140, 1), 110, 10),0) 
+polygon(cord.x1,cord.y1,col='6')
+text(95,0.005, "? ",xpd=5)
+text(115,0.005, "1-? ",xpd=5)
+
+# As you can see this area are all of the samplings
+# from the alternative hypothesis that happen to be true in this case, that
+# would lead to a rejection of the false null hypothesis.
+# This is also called the statistical power of the test.

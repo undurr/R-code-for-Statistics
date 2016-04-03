@@ -1,0 +1,9 @@
+# visualizing hypothesis tests
+
+# one tailed test
+x=seq(50, 140,length=200)
+y1=dnorm(x, 80, 10)
+plot(x, y1, type='l', lwd=2, col='red')
+y2=dnorm(x,110,10)
+lines(x,y2, type='l', lwd=2, col='blue')
+abline(v=qnorm(0.95, 80, 10))

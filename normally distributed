@@ -1,0 +1,118 @@
+# Parametric tests, such as the t-test or the z-test, 
+# are based on knowledge about the population distribution, or the sampling distribution. 
+# Parametric tests typically have high statistical power and are therefore good 
+# alternatives. To be able to use this kind of test you may need to show that your 
+# data is at least approximately normally distributed. Let us try some strategies
+# for testing normality, and you will get to practice more programming. 
+# Boxplot, histogram, QQplot.
+
+body <-
+  read.table("http://www.amstat.org/publications/jse/datasets/body.dat.txt")
+dim(body)  #Check that dimensions are 507  25
+BodyMeasurements <- c("Biacromial_diameter","Biiliac_diameter",
+                      "Bitrochanteric_diameter", "Chest_depth","Chest_diameter",
+                      "Elbow_diameter","Wrist_diameter", "Knee_diameter","Ankle_diameter",
+                      "Shoulder_girth","Chest_girth", "Waist_girth","Navel_girth",
+                      "Hip_girth","Thigh_girth", "Bicep_girth","Forearm_girth",
+                      "Knee_girth","Calf_max_girth", "Ankle_min_girth","Wrist_min_girth",
+                      "Age","Weight","Height","Gender")
+names(body) <- BodyMeasurements
+#The appropriate variable type of gender is factor
+body$Gender <- as.factor(body$Gender)
+
+#Use the text describing the dataset:
+  
+ # http://www.amstat.org/publications/jse/v11n2/datasets.heinz.html, 
+#and your choice of the following code.
+# In this case male is coded as 1 and female is coded as 0
+
+table(body$Gender)
+summary(body$Gender)
+dim(body[body$Gender==0,])
+dim(body[body$Gender==1,]) 
+#why we need the , after the 0 or 1:
+# Indexing in a data.frame using hard bracket has the format [rows, columns] 
+# Look at activity 1: dim(body[body$Gender==0,]) Rows where Gender==0 are selected. 
+# The position after the comma is for selecting columns. When left empty, 
+# all columns are selected.
+
+# To get a simultaneous overview of many variables it's convenient to use boxplot. 
+boxplot(body)
+
+# You may want to keep variables of similar range in separate graphs to see better.
+
+#NOTE: In some cases you can produce correct solutions that are not recognized 
+# by the automated grader. Don't get angry. Please just try a few different alternatives
+# and test your code in R. You will find the right one! 
+# That's the ultimate code grader ;)
+# A  line of code that draws boxplots of variables ten through fifteen.
+boxplot(body[,10:15])
+
+mat<-cbind(body$Chest_depth,body$Wrist_diameter)
+boxplot(mat)
+
+# Look carefully at the box plot for shoulder_girth.
+# Draw a histogram to get a closer look. What can be said about the shape 
+# of the distribution for the variable shoulder_girth? 
+
+hist(body$Shoulder_girth)
+
+# bimodal (has two peaks) and  symmetrical 
+
+# Shoulder_girth turned out to be bimodal. What other variable in 'body' could 
+# be used to split Shoulder_girth in unimodal distributions? The automatic grader
+# is picky. Use the exact name from just before Activity 1 ;) 
+
+# answer gender
+boxplot(body$Shoulder_girth~body$Gender)
+# for males
+hist(body$Shoulder_girth[body$Gender==1])
+
+# A better visual check of normality than a boxplot or a histogram 
+# is the so called Q-Q plot (quantile-quantile plot). A Q-Q plot is a scatterplot 
+# of quantiles of two distributions. If the distributions are similar in shape, 
+# the plot will come out as a straight line x=y.
+
+# (See: http://en.wikipedia.org/wiki/Normal_probability_plot)
+
+# Try this code:
+  qqnorm(y=body$Shoulder_girth); qqline(y=body$Shoulder_girth); ?qqnorm()
+  
+  # Change the code to draw a QQ plot for the male subject only. 
+  # Write one code string in each box below. First qqnorm, then qqline.
+  ?qqnorm()
+  qqnorm(y=body$Shoulder_girth[body$Gender==1]);
+  qqline(y=body$Shoulder_girth[body$Gender==1])
+  
+  # Notice how the dots in the QQplot for males centre beautifully around 
+  #the x=y line. This is clearly a normal distribution which is great news! 
+  # Because, it means that you can use a parametric test to ask questions.
+  
+# Write code for testing whether the mean Shoulder_girth differs between males 
+  #and females.
+  
+  # The null hypothesis would be: There is no difference in means. 
+  #H0: µ males = µ females
+  
+  # The alternative hypothesis would be: There is a difference in means. 
+  #H1: µ males ≠ µ females
+  
+  t.test(body$Shoulder_girth ~ body$Gender, var.equal=T)
+  # There are more ways of writing the arguments for t.test() since the number 
+  # of measurements is so large, a z-test would be a resonable approximation.
+  
+  # p-value < 2.2e-16. I know from the comments that 2.2e-16 is the value of .
+  # Machine$double.eps - the smallest floating point number such that 1 + x != 1, 
+  # but of course R can represent numbers much smaller than that. 
+  
+  # Which statements are true about the result of the t-test in the activity above
+  # A. The null hypothesis was rejected 
+  # C. The p-value was below 0.05 
+  # D.  There is a true difference in mean Shoulder_girth between men and women 
+  
+  # We suggest that you continue to explore other variables in the body 
+  # dataset you have used for the activities 1-10. Or, move on to some other datasets.
+  
+  # Look for a quantitative variable on at least interval scale. 
+  # Use boxplot() , hist(), qqnorm() and qqline() to check normality.
+  

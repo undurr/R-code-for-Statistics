@@ -1,0 +1,64 @@
+# t- test in R
+# get started calculating t-tests in R
+?t.test()
+
+rm(list = ls())
+
+# the two tailed test is called 'two.sided' in this function
+# for two independent groups you must give the argument paired=FALSE
+# of th t test can be for a repeated measure - where one subject has been measured twice
+# if that is the case then the argument paired=TRUE
+# var.equals=TRUE if  variants equal FALSE then you are calcualting a special kind
+# of t test called 'the welch test' (compensates for different variations in the groups)
+ls()
+#pipe("pbpaste") pastes from the mac what is in the clipboard pipe("pbcopy")
+weight <- read.table(pipe("pbpaste"), header=T)
+ls()
+head(weight)
+# this does not tell us much
+t.test(weight)
+
+# this will look at this as 2 independent groups. 
+t.test(weight$A, weight$B)
+
+# we should have the variant as equal. Same variability NOT welch
+t.test(weight$A, weight$B, var.equal=T)
+
+#really this is a comparison of a paired t test so we must set this atribute
+t.test(weight$A, weight$B, paired=T)
+
+# now we see that the p value is small
+# Here you can see from the p-value 0.027 that the probability
+# that the mean paired differences in two groups would be 6.9
+# is quite a bit lower than 5 percent. So at the 5 percent level
+# we would here reject the null hypothesis, and conclude that they seem to be a difference
+# between the two groups. Maybe it was measurement of weights before and after some kind of intervention like a diet.
+
+
+#A function for creating random examples of t-tests
+ttest.for.examination <- function(x,y,z,k)
+{
+  subjects <- x
+  mean1 <- y
+  mean2 <- z
+  standarddev <- k
+  print( c("Number of measurements:   ", x))
+  print( c("Mean of group 1: ", y))
+  print( c( "Mean of group 2: ",z))
+  print( c("Standard deviation:  ", k))
+  group1 <- round(rnorm(x, y, k))
+  group2 <- round(rnorm(x, z, k))
+  framedata <- cbind(group1, group2)
+  print(framedata)
+  print( list (t.test(group1, group2, var.equal = T), t.test(group1, group2, var.equal = T, paired = T)))
+}
+
+#Now you can run the new function.
+ttest.for.examination(13,90,105,10)
+ttest.for.examination(13,92,100,10)
+#Try running the same arguments twice
+ttest.for.examination(13,92,100,10)
+#How can you use set.seed() to get reproducible "random" t-tests?
+
+#try a smaller variation
+ttest.for.examination(13,92,100,10) # you may need to run this several times?

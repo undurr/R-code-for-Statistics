@@ -1,0 +1,31 @@
+# Function in R for calculating CV - coefficient of variance
+
+set.seed(200)
+ls()
+instrument1 <- round(rnorm(20,6,0.5),3)
+instrument2 <- round(rnorm(20,6,2),3)
+comparemethods <- cbind(instrument1, instrument2); boxplot(comparemethods)
+
+mean(instrument1)
+mean(instrument2)
+
+sd(instrument1)
+sd(instrument2)
+
+CVinstrument1<-round(sd(instrument1)/mean(instrument1)*100,1)
+CVinstrument2<-round(sd(instrument2)/mean(instrument2)*100,1)
+
+XX<-function(cv)(sd(cv)/mean(cv)*100)
+round(XX(instrument1),1)
+round(XX(instrument2),1)
+
+cv <- function(m)(sd(m)/mean(m)*100)
+round(cv(instrument1),1)
+round(cv(instrument2),1)
+
+
+
+CVinstrument1<-(0.5/5)*100
+CVinstrument2<-(2/6)*100
+
+# Select the correct alternative below. CV instrument1, CV intstrument2.

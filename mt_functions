@@ -1,0 +1,21 @@
+rm(list = ls())
+
+
+
+standard_error.prop <- function(p,n)
+{
+   standard_error <- sqrt(p*(1-p)/n)
+   return(standard_error)
+}
+
+
+
+confidence_interval.95 <- function(p,n)
+{
+  standard_error <- sqrt(p*(1-p)/n)
+  low.lim <- p - standard_error*1.96
+  upp.lim <- p + standard_error*1.96
+
+  return(c(low.lim,upp.lim))
+
+}

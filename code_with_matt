@@ -1,0 +1,87 @@
+#Network_Connect
+ls()
+
+filename <- "/Users/durrm/Desktop/R_folder_2/Network_Connection.txt"
+data <- read.table(filename,header=T)
+data
+x <- table(data[,3],data[,6]) #shows observed behavior and is expected = observed
+x
+x <- table(data[,4],data[,6]) ##shows computer type and is expected = observed
+x
+fisher.test(x)
+NAs <- rep(NA,12)
+NAs
+
+index <- which(NAs=="immediate") #not sure what this does, seems like which NAs = immediate which makes no sense to me
+index #why intetger(0)
+
+ObsBeh <- data[,3] #column three is the observed behavior
+ObsBeh
+
+index <- which(ObsBeh=="immediate") #which observed behaviors = immediate
+index
+
+stuff[index] <- 0 # where observed behaviors = immediate shown as 0 - confirm
+stuff
+
+index <- which(ObsBeh != "immediate")  #where observed does not equal immediate shown as the column #
+index
+
+stuff[index] <- 1 # where observed behaviors = immediate shown as 1 - confirm
+stuff
+
+  
+           x <- table(stuff,data[,4]) #column four is computer type
+           x
+           
+           stuff
+           
+           data[,4]
+           
+           x <- table(stuff,data[,4])
+           x
+           
+           fisher.test(x)
+           chisq.test(x)
+
+           data
+           
+           data[,7] #column is observed better
+           
+           sum(data[,7],na.rm=T) # there are 7 true observed betters
+           
+           sum(data[,7],na.rm=T)/length(data[,7]) # the formula for standard error
+           
+           #ok lets create a formula
+           standard_error.prop <- function(p,n)
+           {
+             standard_error <- sqrt(p*(1-p)/n)
+             return(standard_error)
+           }
+           ls() #yep it is there
+        
+           standard_error.prop(.6,10)
+          
+        
+           
+           confidence_interval.95 <- function(p,n)
+           {
+             standard_error <- sqrt(p*(1-p)/n)
+             low.lim <- p - standard_error*1.96
+             upp.lim <- p + standard_error*1.96
+             
+             return(c(low.lim,upp.lim))
+             
+           }
+           confidence_interval.95(.6,10) # p=.6 and n=10 confirm
+           
+           confidence_interval.95(.4,10)
+           
+           data
+           
+           x <- table(data[,4],data[,7])
+           x
+         
+           chisq.test(x) #this is a large sample
+           fisher.test(x) # Fisher's Exact Test for small samples.
+        
